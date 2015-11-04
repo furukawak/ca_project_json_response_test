@@ -1,7 +1,7 @@
 require 'httpclient'
 require 'json'
 
-FILE_DIR = "storage/in"
+FILE_DIR = "storage/in_kokyakuCd_ibm2"
 HOST_NAME = "http://192.168.33.80"
 API_NAME = "/api/v1/check_and_action/scores"
 
@@ -14,15 +14,15 @@ Dir.foreach(FILE_DIR) { |file_name|
     file_names << file_name
     count += 1
   end
-  # break if count == limit
+  #break if count == limit
 }
 # end to get files
 
 dir_name = DateTime.now.strftime('%Y%m%d_%H%M%S')
-result_dir = "./storage/out/#{dir_name}"
-json_dir = "./storage/out/#{dir_name}/json"
-results_json_dir = "./storage/out/#{dir_name}/json/results"
-errors_json_dir = "./storage/out/#{dir_name}/json/errors"
+result_dir = "./storage/out/IBM_#{dir_name}"
+json_dir = "./storage/out/IBM_#{dir_name}/json"
+results_json_dir = "./storage/out/IBM_#{dir_name}/json/results"
+errors_json_dir = "./storage/out/IBM_#{dir_name}/json/errors"
 Dir.mkdir(result_dir)
 Dir.mkdir(json_dir)
 Dir.mkdir(results_json_dir)

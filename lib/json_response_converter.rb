@@ -55,6 +55,7 @@ class JsonResponseConverter
         0.upto(7) {|val_count|
           res << "value[#{ctg_count}#{plt_val_count}#{val_count}]"
           res << "age[#{ctg_count}#{plt_val_count}#{val_count}]"
+          res << "date[#{ctg_count}#{plt_val_count}#{val_count}]"
           res << "hantei[#{ctg_count}#{plt_val_count}#{val_count}]"
           res << "score[#{ctg_count}#{plt_val_count}#{val_count}]" # should remove
         }
@@ -115,10 +116,12 @@ class JsonResponseConverter
       score_plot2['age'] <=> score_plot1['age']
     }
 
+    ages = []
     0.upto(7) {|count|
       if score_plots[count]
         res << score_plots[count]['age']
         res << score_plots[count]['score']
+        ages << score_plots[count]['age']
       else
         res << nil
         res << nil
@@ -160,17 +163,32 @@ class JsonResponseConverter
             res << plot_values[plt_val_count]['unit']
 
             values = plot_values[plt_val_count]['values'].sort {|value1, value2|
-              value2['age'] <=> value1['age']
+              value2['date'] <=> value1['date']
             }
 
             0.upto(7) {|val_count|
-              if values[val_count]
-                res << values[val_count]['value']
-                res << values[val_count]['age']
-                res << values[val_count]['hantei']
-                res << values[val_count]['score'] # should remove
+              if ages[val_count]
+                value = values[val_count]
+                #value = values.detect {|value|
+                #  value['age'] == ages[val_count]
+                #}
+                if value
+                  res << value['value']
+                  res << value['age']
+                  res << value['date']
+                  res << value['hantei']
+                  res << value['score'] # should remove
+                else
+                  # values
+                  res << nil
+                  res << nil
+                  res << nil
+                  res << nil
+                  res << nil # should remove
+                end
               else
                 # values
+                res << nil
                 res << nil
                 res << nil
                 res << nil
@@ -185,6 +203,7 @@ class JsonResponseConverter
             res << nil
             0.upto(7) {|val_count|
               # values
+              res << nil
               res << nil
               res << nil
               res << nil
@@ -215,6 +234,7 @@ class JsonResponseConverter
             res << nil
             res << nil
             res << nil
+            res << nil
             res << nil # should remove
           }
         }
@@ -224,8 +244,8 @@ class JsonResponseConverter
 
     res << hash['data']['life_check']['chart']['average_cnt']
     ['eat', 'motion', 'drink', 'smoke'].each {|type|
-      res << hash['data']['life_check']["habit_#{type}"]
-      res << hash['data']['life_check']["habit_#{type}_msg"]
+      res << hash['data']['life_check']['chart']["habit_#{type}"]
+      res << hash['data']['life_check']['chart']["habit_#{type}_msg"]
     }
 
     {
